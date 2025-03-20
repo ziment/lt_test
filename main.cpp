@@ -3,12 +3,14 @@
 
 // Не принимаем изначальную сумму, она не нужна для ответа
 void usage() {
-    std::cout << "Usage: fincalc <interest> <multiplier>" << std::endl;
+    std::cout << "Usage: fincalc <interest> <multiplier>\nConstraints:\n  "
+                 "interest > 0\n  multiplier >= 1"
+              << std::endl;
 }
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
-        std::cerr << "Must provide exactly 2 parameters" << std::endl;
+        std::cerr << "Exactly 2 arguments are required" << std::endl;
         usage();
         return 1;
     }
@@ -19,15 +21,15 @@ int main(int argc, char* argv[]) {
         interest = std::stod(argv[1]);
         mult = std::stod(argv[2]);
     } catch (std::invalid_argument) {
-        std::cerr << "Cannot parse numerical arguments" << std::endl;
+        std::cerr << "Unable to parse numerical arguments" << std::endl;
         usage();
         return 2;
     }
 
     if (interest <= 0 || mult < 1) {
-        std::cerr << "Invalid arguments" << std::endl;
+        std::cerr << "Invalid argument values." << std::endl;
         usage();
-        return 2;
+        return 3;
     }
 
     double years = log(mult) / log(1 + interest / 100);
