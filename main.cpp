@@ -8,7 +8,27 @@ void usage() {
               << std::endl;
 }
 
+void unable_to_parse() {
+    std::cerr << "Unable to parse numerical arguments" << std::endl;
+    usage();
+    std::exit(2);
+}
+
+void constraints_not_satisfied() {
+    std::cerr << "Arguments do not satisfy the constraints" << std::endl;
+    usage();
+    std::exit(3);
+}
+
 int main(int argc, char* argv[]) {
+    if (argc == 2) {
+        if (std::string(argv[1]) == "help") {
+            usage();
+            return 0;
+        }
+    }
+
+
     if (argc != 3) {
         std::cerr << "Exactly 2 arguments are required" << std::endl;
         usage();
@@ -21,18 +41,16 @@ int main(int argc, char* argv[]) {
         interest = std::stod(argv[1]);
         mult = std::stod(argv[2]);
     } catch (std::invalid_argument) {
-        std::cerr << "Unable to parse numerical arguments" << std::endl;
-        usage();
-        return 2;
+        unable_to_parse();
+    } catch (std::out_of_range) {
+        unable_to_parse();
     }
 
     if (interest <= 0 || mult < 1) {
-        std::cerr << "Invalid argument values." << std::endl;
-        usage();
-        return 3;
+        constraints_not_satisfied();
     }
 
-    double years = log(mult) / log(1 + interest / 100);
+    double years = std::log(mult) / std::log(1 + interest / 100);
 
     std::cout << ceil(years) << std::endl;
 
